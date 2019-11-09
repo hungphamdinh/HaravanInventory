@@ -1,0 +1,22 @@
+[
+    {
+        "id": 1,
+        "time": "12:40pm",
+        "avatar_url": "https://png.pngtree.com/png-clipart/20190619/original/pngtree-notification-vector-icon-png-image_4017382.jpg",
+        "last_message_content": "Curabitur at ipsum ac tellus semper interdum. Mauris ullamcorper purus sit amet nulla. Quisque arcu libero, rutrum ac, lobortis vel, dapibus at, diam."
+    },
+    {
+        "id": 2,
+        "time": "4:20am",
+        "avatar_url": "https://png.pngtree.com/png-clipart/20190619/original/pngtree-notification-vector-icon-png-image_4017382.jpg",
+        "last_message_content": "Curabitur at ipsum ac tellus semper interdum. Mauris ullamcorper purus sit amet nulla. Quisque arcu libero, rutrum ac, lobortis vel, dapibus at, diam."
+
+    },
+    {
+        "id": 3,
+        "time": "5:10am",
+        "avatar_url": "https://png.pngtree.com/png-clipart/20190619/original/pngtree-notification-vector-icon-png-image_4017382.jpg",
+        "last_message_content": "Curabitur at ipsum ac tellus semper interdum. Mauris ullamcorper purus sit amet nulla. Quisque arcu libero, rutrum ac, lobortis vel, dapibus at, diam."
+
+    }
+]

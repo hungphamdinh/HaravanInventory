@@ -1,0 +1,34 @@
+[
+    {
+        "id": 1,
+        "first_name": "Mua 1 tặng 1",
+        "avatar_url": "https://png.pngtree.com/png-clipart/20190614/original/pngtree-simple-card-buy-1-get-1-free-label-element-png-image_3649958.jpg",
+        "date_begin": "30-10/2019",
+        "date_end":"20/11-2019",
+        "price":"Miễn phí",
+        "is_check": false
+
+    },
+    {
+        "id": 2,
+        "first_name": "Combo ...",
+        "quantity": "5/10",
+        "avatar_url": "https://png.pngtree.com/png-clipart/20190516/original/pngtree-super-sale-special-offer-banner-tag-vector-eps10-illustration.-png-image_3527395.jpg",
+        "date_begin": "30-12/2019",
+        "date_end":"01-02-2019",
+        "is_check": false,
+        "price":"200.000 vnd"
+
+    },
+    {
+        "id": 3,
+        "first_name": "Khuyến mãi mùa lễ",
+        "quantity": "5/10",
+        "avatar_url": "https://png.pngtree.com/png-clipart/20190515/original/pngtree-happy-new-year-christmas-with-elements-decoration-png-image_3683666.jpg",
+        "date_begin": "21-11/2019",
+        "date_end":"27/11-2019",
+        "is_check": false,
+        "price":"200.000 vnd"
+
+    }
+]
