@@ -4,12 +4,12 @@ import { FlatList } from "react-native-gesture-handler";
 import { Button, CheckBox } from 'react-native-elements';
 import { ProgressSteps, ProgressStep } from 'react-native-progress-steps';
 import Modal from 'react-native-modal';
-export default class InventoryItem extends React.Component {
+export default class NewInventItem extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            listProduct: this.props.production,
-            newItem: [],
+          //  listProduct: this.props.production,
+            newItem: this.props.newInvent,
             isModalVisible: false,
             modalItem:{},
         }
@@ -23,54 +23,6 @@ export default class InventoryItem extends React.Component {
         //    console.log(this.state.modalItem);
     };
 
-    onCheck = (itemCheck) => {
-        console.log(itemCheck)  ;
-        const updateProduct = this.state.listProduct.map(item => {
-            //console.log(id);
-            if (item.id === itemCheck.id) {
-                if (item.is_check == true) {
-                    item.is_check = false;
-                }
-                else {
-                    item.is_check = true;
-                     //this.setState({newItem:itemCheck})
-                    // console.log(this.state.newItem);
-                    this.props.addNewInventItem(item);             
-
-                }
-            }
-            return item;
-        });
-
-        const newUpdateProduct = [...updateProduct];
-       
-        this.setState({ listProduct: updateProduct });
-
-    }
-    onAllCheck = (id) => {
-        //console.log(id);
-        const updateProduct = this.state.listProduct.map(item => {
-            for (var i = 0; i < id.length; i++) {
-                if (item.id === id[i]) {
-                    if (item.is_check == true) {
-                        item.is_check = false;
-                    }
-                    else {
-                        item.is_check = true;
-                        // var arrNewItem=[];
-                        // arrNewItem=arrNewItem.push(item.is_check);
-                        // item=arrNewItem;
-                    }
-                }
-            }
-            return item;
-        });
-
-        // const newUpdateProduct = [...updateProduct];
-        //console.log(updateProduct)
-        this.setState({ listProduct: updateProduct });
-
-    }
     openModalBox=()=>{
         const item=this.state.modalItem;
         //console.log(item)
@@ -118,16 +70,6 @@ export default class InventoryItem extends React.Component {
                         <View style={{ flex: 0.55, justifyContent: 'center' }}>
                             <Text style={styles.label}>{item.first_name}</Text>
                         </View>
-                        <View style={{ flex: 0.45 }}>
-                            <CheckBox
-                                key={item.id}
-                                onPress={() => this.onCheck(item)}
-                                title='Chọn'
-                                checked={item.is_check}
-                                //progressBarColor={'#007aff'}
-                                containerStyle={styles.ckBox}
-                            />
-                        </View>
                     </View>
                     <Text style={styles.info}>Giá: {item.price}</Text>
                     <Text numberOfLines={2} style={styles.info}>{item.last_message_content}</Text>
@@ -141,21 +83,9 @@ export default class InventoryItem extends React.Component {
     render() {
         return (
 
-            <View>
-                
-                <View style={{ alignItems: 'flex-end' }}>
-                    <TouchableOpacity style={styles.btnCheckAllCkb}
-                        onPress={() => this.onAllCheck(this.state.listProduct.map(item => item.id))}
-                    >
-                        <Text style={styles.txtCheckAll}>
-                            Chọn tất cả
-                                </Text>
-                    </TouchableOpacity>
-
-
-                </View>
+            <View>                
                 <FlatList
-                    data={this.state.listProduct}
+                    data={this.state.newItem}
                     renderItem={this.renderInventory}
                     keyExtractor={(item) => item.avatar_url}
                 />

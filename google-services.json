@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "173782729773",
+    "firebase_url": "https://haravaninventory.firebaseio.com",
+    "project_id": "haravaninventory",
+    "storage_bucket": "haravaninventory.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:173782729773:android:e16181cd9a0d65ae7f24a4",
+        "android_client_info": {
+          "package_name": "com.example.HaravanInventory"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "173782729773-r4i66ha5htl5m7adeldendrmrgao5ak7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.HaravanInventory",
+            "certificate_hash": "2f48b51c74be63e04f9496ff81b4cf406d70cf87"
+          }
+        },
+        {
+          "client_id": "173782729773-k7174jgrmqqv7mkp32a5fs9ubfkmt0jo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAl17TNGbdapecDGDTzMVmidTItu8qxBNw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "173782729773-k7174jgrmqqv7mkp32a5fs9ubfkmt0jo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

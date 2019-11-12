@@ -4,10 +4,11 @@ import { Keyboard, Text, View, TextInput, TouchableWithoutFeedback, Alert, Keybo
 import { Button, Image } from 'react-native-elements';
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { ProgressDialog } from 'react-native-simple-dialogs';
+import {GoogleSignIn} from 'expo-google-sign-in';
 import Spinner from 'react-native-loading-spinner-overlay';
-import {firebaseConfig} from '../config/config'
 import * as Google from 'expo-google-app-auth';
 import firebase from 'firebase'
+import Expo from 'expo'
 const appId = "1047121222092614"
 
 export default class LoginScreen extends Component {
@@ -19,39 +20,111 @@ export default class LoginScreen extends Component {
     }
 
   }
+  
+  
+  onSignIn = googleUser => {
+    console.log('Google Auth Response', googleUser);
+    // We need to register an Observer on Firebase Auth to make sure auth is initialized.
+    var unsubscribe = firebase.auth().onAuthStateChanged(
+      function(firebaseUser) {
+        unsubscribe();
+        // Check if we are already signed-in Firebase with the correct user.
+        if (!this.isUserEqual(googleUser, firebaseUser)) {
+          // Build Firebase credential with the Google ID token.
+          var credential = firebase.auth.GoogleAuthProvider.credential(
+            googleUser.idToken,
+            googleUser.accessToken
+          );
+          // Sign in with credential from the Google user.
+          firebase
+            .auth()
+            .signInWithCredential(credential)
+            .then(function(result) {
+              console.log('user signed in ');
+              if (result.additionalUserInfo.isNewUser) {
+                firebase
+                  .database()
+                  .ref('/users/' + result.user.uid)
+                  .set({
+                    gmail: result.user.email,
+                    profile_picture: result.additionalUserInfo.profile.picture,
+                    first_name: result.additionalUserInfo.profile.given_name,
+                    last_name: result.additionalUserInfo.profile.family_name,
+                    created_at: Date.now()
+                  })
+                  .then(function(snapshot) {
+                    // console.log('Snapshot', snapshot);
+                  });
+              } else {
+                firebase
+                  .database()
+                  .ref('/users/' + result.user.uid)
+                  .update({
+                    last_logged_in: Date.now()
+                  });
+              }
+            })
+            .catch(function(error) {
+              // Handle Errors here.
+              var errorCode = error.code;
+              var errorMessage = error.message;
+              // The email of the user's account used.
+              var email = error.email;
+              // The firebase.auth.AuthCredential type that was used.
+              var credential = error.credential;
+              // ...
+            });
+        } else {
+          console.log('User already signed-in Firebase.');
+        }
+      }.bind(this)
+    );
+  };
+  isUserEqual = (googleUser, firebaseUser) => {
+    if (firebaseUser) {
+      var providerData = firebaseUser.providerData;
+      for (var i = 0; i < providerData.length; i++) {
+        if (
+          providerData[i].providerId ===
+            firebase.auth.GoogleAuthProvider.PROVIDER_ID &&
+          providerData[i].uid === googleUser.getBasicProfile().getId()
+        ) {
+          // We don't need to reauth the Firebase connection.
+          return true;
+        }
+      }
+    }
+    return false;
+  };
   componentDidMount(){
-    this.checkIfLoggedIn();
+    //console.log(firebase.database())
   }
   signInWithGoogleAsync= async()=> {
     try {
       const result = await Google.logInAsync({
-        androidClientId: "489925057956-o8jm2lnnnom02f2e8ebran6p9nnlcson.apps.googleusercontent.com",
-        behavior:'web',
+        androidClientId: "129108952081-ueggvfsvl6hsdt85e4ok79t0ec595a5n.apps.googleusercontent.com",
+        //behavior:'web',
+        androidStandaloneAppClientId:  "129108952081-ueggvfsvl6hsdt85e4ok79t0ec595a5n.apps.googleusercontent.com",
         scopes: ['profile', 'email'],
       });
   
       if (result.type === 'success') {
+        this.onSignIn(result);
+        console.log(result.accessToken)
+        this.props.navigation.navigate('Loading',  {
+          'token':result.accessToken
+        });    
         return result.accessToken;
+    
       } else {
         return { cancelled: true };
       }
     } catch (e) {
+      console.log(e);
       return { error: true };
     }
   }
-  checkIfLoggedIn=()=>{
-    checkIfLoggedIn=()=>{
-      firebase.auth().onAuthStateChanged(user=>{
-        if(user){
-          this.props.navigation.navigate('Main');
-        }
-        else{
-          this.props.navigation.navigate('Login')
-        }
-      }).bind(this);
-    
-    };
-  }
+ 
   render() {
     return (
       <KeyboardAvoidingView style={styles.containerView} behavior="padding">
@@ -135,19 +208,6 @@ export default class LoginScreen extends Component {
       },
       4000,
     );
-  }
-  async onFbLoginPress() {
-    const { type, token } = await Expo.Facebook.logInWithReadPermissionsAsync(appId, {
-      permissions: ['public_profile', 'email'],
-    });
-    if (type === 'success') {
-      const response = await fetch(
-        `https://graph.facebook.com/me?access_token=${token}`);
-      Alert.alert(
-        'Logged in!',
-        `Hi ${(await response.json()).name}!`,
-      );
-    }
   }
 }
 const styles = StyleSheet.create({

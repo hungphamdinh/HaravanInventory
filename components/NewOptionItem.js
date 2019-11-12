@@ -3,37 +3,15 @@ import { Image, TouchableOpacity, View, Text, StyleSheet } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import { CheckBox } from 'react-native-elements';
 import { ProgressSteps, ProgressStep } from 'react-native-progress-steps';
-export default class OptionItem extends React.Component {
+export default class NewOptionItem extends React.Component {
     constructor(props) {
         super(props)
         this.state={
-            listOption: this.props.option,
-           // listNewOption:{},
+           // listOption: this.props.option,
+            listNewOption:this.props.newOption,
         }
     }
-    onCheckOption = (itemCheck)  => {
-       
-        const updateProduct = this.state.listOption.map(item => {
-            if (item.id === itemCheck.id) {
-               item.is_check=true
-              
-            }
-            else{
-                item.is_check=false
-            }
-            
-            return item;
-        });
-
-        const newUpdateProduct = [...updateProduct];
-
-        this.setState({ listOption: updateProduct,listNewOption:itemCheck });
-        this.props.addNewOptionItem(itemCheck);
-      
-
-    }
-
-    renderOptionItem = ({ item }) => {
+    renderNewOptionItem = ({ item }) => {
         return (
             <View style={styles.messeageView} >
                 <Image
@@ -48,14 +26,6 @@ export default class OptionItem extends React.Component {
                         <Text style={styles.label}>{item.first_name}</Text>
                         </View>
                         <View style={{flex:0.45}}>
-                        <CheckBox
-                            key={item.id}
-                            onPress={() => this.onCheckOption(item)}
-                            title='Chọn'
-                            checked={item.is_check}
-                            //progressBarColor={'#007aff'}
-                            containerStyle={styles.ckBox}
-                        />
                         </View>
                     </View>
                     <Text style={styles.info}>Giá: {item.price}</Text>
@@ -68,23 +38,16 @@ export default class OptionItem extends React.Component {
         )
     }
     render() {
-     //   console.log(this.state.listNewOption);
+       
         return (
             <View>
             <View style={{ alignItems: 'flex-end' }}>
             </View>
-            <FlatList
-                data={this.state.listOption}
-                renderItem={this.renderOptionItem}
-                keyExtractor={(item) => item.date_begin}
-            />
+            <this.renderNewOptionItem item={this.state.listNewOption}/>
         </View>
 
         )
     }
-}
-export const tranmissNewOption=()=>{
-
 }
 const styles = StyleSheet.create({
     btnDrawer: {

@@ -9,8 +9,20 @@ import AboutUsScreen from '../screens/AboutUsScreen';
 import ContactScreen from '../screens/ContactScreen';
 import DetailOptionScreen from '../screens/DetailOptionScreen'
 import InventProgressScreen from '../screens/InventProgressScreen'
+import LoadingScreen from '../screens/LoadingScreen'
 import Drawer from '../navigation/Drawer'
 import HomeScreen from '../screens/HomeScreen'
+import firebase from 'firebase'
+import {firebaseConfig} from '../config/config'
+import { Linking } from 'expo';
+
+const config = {
+  // This dynamic link will be rejected by the server
+  redirectUrl: `${Linking.makeUrl()}:/oauthredirect`,
+};
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig)
+  }
 const RootStack = createStackNavigator({
   Login: {
     screen: LoginScreen,
@@ -19,6 +31,7 @@ const RootStack = createStackNavigator({
     },
 
   },
+  Loading:LoadingScreen,
   Main: {
     screen: MainTabNavigator,
     navigationOptions: {

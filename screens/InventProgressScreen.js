@@ -3,13 +3,15 @@ import React from "react";
 import { Image, TouchableOpacity, View, Text, StyleSheet } from "react-native";
 import { ProgressSteps, ProgressStep } from 'react-native-progress-steps';
 import { FlatList } from "react-native-gesture-handler";
-import { CheckBox } from 'react-native-elements';
+import { Button, CheckBox } from 'react-native-elements';
 import CustomCheckbox from '../screens/CustomCheckbox';
-import InventItem from '../components/InventoryItem'
-import OptionItem from '../components/OptionItem'
-import production from '../utils/production.json'
-import option from '../utils/option.json'
-
+import InventItem from '../components/InventoryItem';
+import OptionItem from '../components/OptionItem';
+import production from '../utils/production.json';
+import option from '../utils/option.json';
+import Modal from 'react-native-modalbox';
+import NewOptionItem from '../components/NewOptionItem';
+import NewInventItem from '../components/NewInventItem'
 export default class InventProgressScreen extends React.Component {
     constructor(props) {
         super(props)
@@ -18,9 +20,20 @@ export default class InventProgressScreen extends React.Component {
             listOption: option,
             checked: false,
             listNewOption: {},
+            listNewProduct: [],
         }
     }
+    addNewOptionItem = (newItem) => {
+        // you can add new Item from a child.
+        this.setState(({ listNewOption: newItem }));
+    }
+    addNewInventItem = (newItem) => {
+        // you can add new Item from a child.
+        //this.setState(({ listNewProduct:  newItem}));
+        this.setState(prevState => ({ listNewProduct: [...prevState.listNewProduct, newItem] }));
 
+        console.log(this.state.listNewProduct)
+    }
     onProductDetail = id => {
         const pView = this.state.listProduct.find(pIndex => pIndex.id === id);
         // console.log(pView)
@@ -30,55 +43,14 @@ export default class InventProgressScreen extends React.Component {
             });
         }, 1000);
     };
-    // componentWillReceiveProps(nextProps) {
-    //     const { listProduct: nextProduct } = nextProps;
-    //     const { listProduct } = this.props;
 
-    //     if (nextProduct !== listProduct) {
-    //         this.setState({ listProduct: nextProduct });
-    //     }
-    //   }
-    
-    renderOptionItem = ({ item }) => {
-        return (
-            <View style={styles.messeageView} >
-                <Image
-                    source={{ uri: item.avatar_url }}
-                    style={styles.imageNewFeed}
-                    resizeMode='contain'
-                />
 
-                <View style={styles.detailArea}>
-                    <View style={styles.row}>
-                        <View style={{flex:0.55,justifyContent:'center'}}>
-                        <Text style={styles.label}>{item.first_name}</Text>
-                        </View>
-                        <View style={{flex:0.45}}>
-                        <CheckBox
-                            key={item.id}
-                            onPress={() => this.onCheckOption(item)}
-                            title='Chọn'
-                            checked={item.is_check}
-                            //progressBarColor={'#007aff'}
-                            containerStyle={styles.ckBox}
-                        />
-                        </View>
-                    </View>
-                    <Text style={styles.info}>Giá: {item.price}</Text>
-                    <Text numberOfLines={2} style={styles.info}>Ngày bắt đầu: {item.date_begin}</Text>
-                    <Text numberOfLines={2} style={styles.info}>Ngày kết thúc: {item.date_end}</Text>
-
-                </View>
-
-            </View>
-        )
-    }
     render() {
-        // console.log(this.state.listProduct);
         //console.log(this.state.listProduct);
         return (
 
             <View style={{ flex: 1 }}>
+                {/* //<ModalBox/> */}
                 <ProgressSteps
                     completedProgressBarColor={'#007aff'}
                     completedStepIconColor={'#007aff'}
@@ -87,31 +59,36 @@ export default class InventProgressScreen extends React.Component {
                     activeStepNumColor={'#fff'}
                     activeStepIconBorderColor={'#007aff'}
                 >
+
                     <ProgressStep
                         previousBtnDisabled={true}
                         //  onPrevious={this.onPreviousNotNull} 
                         label="Sản phẩm">
                         <View style={{ alignItems: 'center' }}>
-                            <InventItem production={this.state.listProduct} />
+                            <InventItem production={this.state.listProduct}
+                                addNewInventItem={this.addNewInventItem}
+                            />
                         </View>
+
                     </ProgressStep>
 
                     <ProgressStep label="Tiện ích" >
                         <View style={{ alignItems: 'center' }}>
                             <OptionItem option={this.state.listOption}
-                                newOption={this.state.listNewOption}
+                                //  newOption={this.state.listNewOption}
+                                addNewOptionItem={this.addNewOptionItem}
                             />
                         </View>
                     </ProgressStep>
                     <ProgressStep label="Kiểm tra" >
                         <View style={{ alignItems: 'center', flexDirection: 'column' }}>
                             <View style={{ flex: 0.5 }}>
-                            <OptionItem option={this.state.listOption}
-                                newOption={this.state.listNewOption}
-                            />
+                                <Text style={styles.label}>Tiện ích đã chọn</Text>
+                                <NewOptionItem newOption={this.state.listNewOption} />
                             </View>
                             <View style={{ flex: 0.5 }}>
-                            <InventItem production={this.state.listProduct} />
+                                <Text style={styles.label}>Sản phẩm đã chọn</Text>
+                                <NewInventItem newInvent={this.state.listNewProduct} />
                             </View>
                         </View>
                     </ProgressStep>
@@ -121,6 +98,7 @@ export default class InventProgressScreen extends React.Component {
                         </View>
                     </ProgressStep>
                 </ProgressSteps>
+
             </View>
         );
     }
@@ -138,8 +116,7 @@ InventProgressScreen.navigationOptions = () => {
 
     };
 };
-//const mapStateToProps = ({ reducer: listProduct }) => ({ listProduct });
-// export default connect(mapStateToProps)(InventProgressScreen);
+
 const styles = StyleSheet.create({
     btnDrawer: {
         width: 20,
@@ -251,5 +228,17 @@ const styles = StyleSheet.create({
     txtCheckAll: {
         color: '#fff',
         fontSize: 16,
-    }
+    },
+    modal3: {
+        height: 300,
+        width: 300
+    },
+    text: {
+        color: "black",
+        fontSize: 22
+    },
+    modal: {
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
 });  
