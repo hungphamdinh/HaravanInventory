@@ -7,43 +7,49 @@ export default class NewOptionItem extends React.Component {
     constructor(props) {
         super(props)
         this.state={
-           // listOption: this.props.option,
-            listNewOption:this.props.newOption,
+            listNewOption: this.props.listNewOption,
+           // listNewOption:this.props.newOption,
         }
     }
     renderNewOptionItem = ({ item }) => {
-        return (
-            <View style={styles.messeageView} >
-                <Image
-                    source={{ uri: item.avatar_url }}
-                    style={styles.imageNewFeed}
-                    resizeMode='contain'
-                />
-
-                <View style={styles.detailArea}>
-                    <View style={styles.row}>
-                        <View style={{flex:0.55,justifyContent:'center'}}>
-                        <Text style={styles.label}>{item.first_name}</Text>
+        //console.log(item);       
+            return (
+                <View style={styles.messeageView} >
+                    <Image
+                        source={{ uri: item.avatar_url }}
+                        style={styles.imageNewFeed}
+                        resizeMode='contain'
+                    />
+    
+                    <View style={styles.detailArea}>
+                        <View style={styles.row}>
+                            <View style={{flex:0.55,justifyContent:'center'}}>
+                            <Text style={styles.label}>{item.first_name}</Text>
+                            </View>
+                            <View style={{flex:0.45}}>
+                            </View>
                         </View>
-                        <View style={{flex:0.45}}>
-                        </View>
+                        <Text style={styles.info}>Giá: {item.price}</Text>
+                        <Text numberOfLines={2} style={styles.info}>Ngày bắt đầu: {item.date_begin}</Text>
+                        <Text numberOfLines={2} style={styles.info}>Ngày kết thúc: {item.date_end}</Text>
+    
                     </View>
-                    <Text style={styles.info}>Giá: {item.price}</Text>
-                    <Text numberOfLines={2} style={styles.info}>Ngày bắt đầu: {item.date_begin}</Text>
-                    <Text numberOfLines={2} style={styles.info}>Ngày kết thúc: {item.date_end}</Text>
-
+    
                 </View>
-
-            </View>
-        )
+            )
+      //  }
     }
     render() {
-       
+    //   console.log(this.state.listOption)
         return (
             <View>
             <View style={{ alignItems: 'flex-end' }}>
             </View>
-            <this.renderNewOptionItem item={this.state.listNewOption}/>
+            <FlatList
+                    data={this.state.listNewOption}
+                    renderItem={this.renderNewOptionItem}
+                    keyExtractor={(item) => item.avatar_url}
+                />
         </View>
 
         )

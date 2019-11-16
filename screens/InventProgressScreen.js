@@ -2,9 +2,6 @@
 import React from "react";
 import { Image, TouchableOpacity, View, Text, StyleSheet } from "react-native";
 import { ProgressSteps, ProgressStep } from 'react-native-progress-steps';
-import { FlatList } from "react-native-gesture-handler";
-import { Button, CheckBox } from 'react-native-elements';
-import CustomCheckbox from '../screens/CustomCheckbox';
 import InventItem from '../components/InventoryItem';
 import OptionItem from '../components/OptionItem';
 import production from '../utils/production.json';
@@ -19,20 +16,62 @@ export default class InventProgressScreen extends React.Component {
             listProduct: production,
             listOption: option,
             checked: false,
-            listNewOption: {},
-            listNewProduct: [],
+            disableNextBtn: true,
+            listNewOption: [],
+            listNewInvent: {},
+
         }
     }
-    addNewOptionItem = (newItem) => {
-        // you can add new Item from a child.
-        this.setState(({ listNewOption: newItem }));
-    }
-    addNewInventItem = (newItem) => {
-        // you can add new Item from a child.
-        //this.setState(({ listNewProduct:  newItem}));
-        this.setState(prevState => ({ listNewProduct: [...prevState.listNewProduct, newItem] }));
+    // componentDidMount=()=>{
+    //     console.log(this.state.listNewOption);
+    //     console.log(this.state.listNewProduct);
+    // }
+    // addNewOptionItem = (newItem) => {
+    //     // you can add new Item from a child.
+    //     this.setState(({ listNewOption: newItem }));
+    // }
+    onNextBtnInvent = () => {
+        this.state.listProduct.map(item => {
+            //console.log(item);
+            if (item.is_check === true) {
+                this.setState({ disableNextBtn: false });
 
-        console.log(this.state.listNewProduct)
+            }
+            else {
+                
+                // this.setState({ disableNextBtn: true });
+                //console.log('onCheck false');
+            }
+        })
+
+    }
+    onAddNewItemToCheck = () => {
+        const NewOption = this.state.listOption.filter(item => {
+            if (item.is_check == true) {
+                return item;
+            }
+            return;
+        });
+        const listNewInvent = this.state.listProduct.filter(item => {
+            if (item.is_check == true) {
+                return item;
+            }
+            return;
+        })
+        this.setState({ listNewInvent: listNewInvent, listNewOption: NewOption });
+    }
+    onNextBtnOption = () => {
+        this.state.listOption.map(item => {
+            //console.log(item);
+            if (item.is_check === true) {
+                this.setState({ disableNextBtn: false });
+            }
+            else {
+                // this.setState({ disableNextBtn: false });
+
+            }
+        })
+
     }
     onProductDetail = id => {
         const pView = this.state.listProduct.find(pIndex => pIndex.id === id);
@@ -43,10 +82,12 @@ export default class InventProgressScreen extends React.Component {
             });
         }, 1000);
     };
-
-
+    onDisable = () => {
+        this.setState({ disableNextBtn: true });
+    }
     render() {
-        //console.log(this.state.listProduct);
+
+
         return (
 
             <View style={{ flex: 1 }}>
@@ -61,38 +102,55 @@ export default class InventProgressScreen extends React.Component {
                 >
 
                     <ProgressStep
+                        onNext={this.onDisable}
                         previousBtnDisabled={true}
+                        nextBtnDisabled={this.state.disableNextBtn}
+                        nextBtnText='Tiếp theo'
                         //  onPrevious={this.onPreviousNotNull} 
                         label="Sản phẩm">
                         <View style={{ alignItems: 'center' }}>
                             <InventItem production={this.state.listProduct}
                                 addNewInventItem={this.addNewInventItem}
+                                onNextBtnInvent={this.onNextBtnInvent}
                             />
                         </View>
 
                     </ProgressStep>
 
-                    <ProgressStep label="Tiện ích" >
+                    <ProgressStep label="Tiện ích"
+                        nextBtnDisabled={this.state.disableNextBtn}
+                        onNext={this.onAddNewItemToCheck}
+                        nextBtnText='Tiếp theo'
+                        previousBtnText='Quay lại'
+                    >
                         <View style={{ alignItems: 'center' }}>
                             <OptionItem option={this.state.listOption}
                                 //  newOption={this.state.listNewOption}
                                 addNewOptionItem={this.addNewOptionItem}
+                                onNextBtnOption={this.onNextBtnOption}
+
                             />
                         </View>
-                    </ProgressStep>
-                    <ProgressStep label="Kiểm tra" >
+                    </ProgressStep >
+                    <ProgressStep label="Kiểm tra"
+                        previousBtnText='Quay lại'
+                        nextBtnText='Tiếp theo'
+                    >
                         <View style={{ alignItems: 'center', flexDirection: 'column' }}>
                             <View style={{ flex: 0.5 }}>
                                 <Text style={styles.label}>Tiện ích đã chọn</Text>
-                                <NewOptionItem newOption={this.state.listNewOption} />
+                                <NewOptionItem listNewOption={this.state.listNewOption} />
                             </View>
                             <View style={{ flex: 0.5 }}>
                                 <Text style={styles.label}>Sản phẩm đã chọn</Text>
-                                <NewInventItem newInvent={this.state.listNewProduct} />
+                                <NewInventItem listNewInvent={this.state.listNewInvent} />
                             </View>
                         </View>
                     </ProgressStep>
-                    <ProgressStep label="Bước 4" >
+                    <ProgressStep label="Bước 4"
+                        previousBtnText='Quay lại'
+                        finishBtnText='Hoàn tất'
+                    >
                         <View style={{ alignItems: 'center' }}>
                             <Text>This is the content within step 4!</Text>
                         </View>
@@ -187,25 +245,6 @@ const styles = StyleSheet.create({
     invenArea: {
         flex: 0.5,
 
-    },
-    btnRegister: {
-        flex: 1,
-        width: 100,
-        height: null,
-        // borderRadius: 20,
-        backgroundColor: 'rgb(71,113,246)',
-        alignItems: 'center',
-        justifyContent: 'center',
-        shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 10,
-        },
-        shadowOpacity: 0.51,
-        shadowRadius: 13.16,
-        elevation: 20,
-        marginLeft: 10,
-        color: '#fff'
     },
     ckBox: {
         width: 90,

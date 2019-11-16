@@ -11,20 +11,20 @@ export default class InventoryItem extends React.Component {
             listProduct: this.props.production,
             newItem: [],
             isModalVisible: false,
-            modalItem:{},
+            modalItem: {},
         }
     }
     toggleModal = (item) => {
         console.log(item)
         this.setState({
-            isModalVisible: !this.state.isModalVisible ,
-            modalItem:item,
-            });
+            isModalVisible: !this.state.isModalVisible,
+            modalItem: item,
+        });
         //    console.log(this.state.modalItem);
     };
 
     onCheck = (itemCheck) => {
-        console.log(itemCheck)  ;
+      //  console.log(itemCheck);
         const updateProduct = this.state.listProduct.map(item => {
             //console.log(id);
             if (item.id === itemCheck.id) {
@@ -33,17 +33,15 @@ export default class InventoryItem extends React.Component {
                 }
                 else {
                     item.is_check = true;
-                     //this.setState({newItem:itemCheck})
-                    // console.log(this.state.newItem);
-                    this.props.addNewInventItem(item);             
-
                 }
             }
             return item;
         });
-
-        const newUpdateProduct = [...updateProduct];
+        
        
+        const newUpdateProduct = [...updateProduct];
+        this.props.onNextBtnInvent();
+
         this.setState({ listProduct: updateProduct });
 
     }
@@ -52,15 +50,17 @@ export default class InventoryItem extends React.Component {
         const updateProduct = this.state.listProduct.map(item => {
             for (var i = 0; i < id.length; i++) {
                 if (item.id === id[i]) {
-                    if (item.is_check == true) {
-                        item.is_check = false;
-                    }
-                    else {
+                    if (item.is_check == false) {
                         item.is_check = true;
-                        // var arrNewItem=[];
-                        // arrNewItem=arrNewItem.push(item.is_check);
-                        // item=arrNewItem;
                     }
+//                     else {
+//                        // item.is_check = true;
+//                         // var arrNewItem=[];
+//                         // arrNewItem=arrNewItem.push(item.is_check);
+//                         // item=arrNewItem;
+//   //                      this.props.addNewInventItem(item);
+//   //                      this.props.onCheckBoxInvent(item);                     
+//                     }
                 }
             }
             return item;
@@ -68,14 +68,16 @@ export default class InventoryItem extends React.Component {
 
         // const newUpdateProduct = [...updateProduct];
         //console.log(updateProduct)
+        this.props.onNextBtnInvent();
+
         this.setState({ listProduct: updateProduct });
 
     }
-    openModalBox=()=>{
-        const item=this.state.modalItem;
+    openModalBox = () => {
+        const item = this.state.modalItem;
         //console.log(item)
-            return(
-                <Modal
+        return (
+            <Modal
                 onBackdropPress={() => this.setState({ isModalVisible: false })}
                 backdropOpacity={0.2}
                 isVisible={this.state.isModalVisible}>
@@ -88,7 +90,7 @@ export default class InventoryItem extends React.Component {
                     <View style={styles.detailArea}>
 
                         <View style={styles.row}>
-                            <View style={{justifyContent: 'center' }}>
+                            <View style={{ justifyContent: 'center' }}>
                                 <Text style={styles.label}>{item.first_name}</Text>
                             </View>
                         </View>
@@ -98,22 +100,22 @@ export default class InventoryItem extends React.Component {
                     </View>
                 </View>
             </Modal>
-            )
+        )
         //}
     }
     renderInventory = ({ item }) => {
         return (
-            
+
             <TouchableOpacity style={styles.messeageView} onPress={() => this.toggleModal(item)}>
                 <Image
                     source={{ uri: item.avatar_url }}
                     style={styles.imageNewFeed}
                     resizeMode='contain'
-                />                
-                
-                 <this.openModalBox /> 
+                />
+
+                <this.openModalBox />
                 <View style={styles.detailArea}>
-                
+
                     <View style={styles.row}>
                         <View style={{ flex: 0.55, justifyContent: 'center' }}>
                             <Text style={styles.label}>{item.first_name}</Text>
@@ -142,7 +144,7 @@ export default class InventoryItem extends React.Component {
         return (
 
             <View>
-                
+
                 <View style={{ alignItems: 'flex-end' }}>
                     <TouchableOpacity style={styles.btnCheckAllCkb}
                         onPress={() => this.onAllCheck(this.state.listProduct.map(item => item.id))}
@@ -225,11 +227,11 @@ const styles = StyleSheet.create({
     },
     imageNewFeed: {
         // flex: 1,
-        width: 80,
-        height: 140,
+        width: 100,
+        height: 120,
         marginHorizontal: 10,
-        justifyContent: 'center',
-        alignItems: 'center'
+        //sjustifyContent: 'center',
+        //alignItems: 'center'
         //backgroundColor:'red',
     },
 
@@ -291,7 +293,7 @@ const styles = StyleSheet.create({
         margin: 0,
         //flex: 0.5,
         backgroundColor: '#fff',
-        flexDirection:'row'
+        flexDirection: 'row'
     },
 
 });  

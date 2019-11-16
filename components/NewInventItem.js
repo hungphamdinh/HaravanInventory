@@ -8,21 +8,42 @@ export default class NewInventItem extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-          //  listProduct: this.props.production,
-            newItem: this.props.newInvent,
+            listNewInvent: this.props.listNewInvent,
+          //  newItem: this.props.newInvent,
             isModalVisible: false,
             modalItem:{},
         }
     }
     toggleModal = (item) => {
-        console.log(item)
+        //console.log(item)
         this.setState({
             isModalVisible: !this.state.isModalVisible ,
             modalItem:item,
             });
         //    console.log(this.state.modalItem);
     };
-
+    onCheck = (itemCheck) => {
+        //  console.log(itemCheck);
+          const updateProduct = this.state.listNewInvent.map(item => {
+              //console.log(id);
+              if (item.id === itemCheck.id) {
+                  if (item.is_check == true) {
+                      item.is_check = false;
+                  }
+                  else {
+                      item.is_check = true;
+                  }
+              }
+              return item;
+          });
+          
+         
+       //   const newUpdateProduct = [...updateProduct];
+          this.props.onNextBtnInvent();
+  
+          this.setState({ listProduct: updateProduct });
+  
+      }
     openModalBox=()=>{
         const item=this.state.modalItem;
         //console.log(item)
@@ -54,38 +75,49 @@ export default class NewInventItem extends React.Component {
         //}
     }
     renderInventory = ({ item }) => {
-        return (
-            
-            <TouchableOpacity style={styles.messeageView} onPress={() => this.toggleModal(item)}>
-                <Image
-                    source={{ uri: item.avatar_url }}
-                    style={styles.imageNewFeed}
-                    resizeMode='contain'
-                />                
-                
-                 <this.openModalBox /> 
-                <View style={styles.detailArea}>
-                
-                    <View style={styles.row}>
-                        <View style={{ flex: 0.55, justifyContent: 'center' }}>
-                            <Text style={styles.label}>{item.first_name}</Text>
+        //console.log(item);
+        //if(item.is_check==true){
+            return (
+                <TouchableOpacity style={styles.messeageView} onPress={() => this.toggleModal(item)}>
+                    <Image
+                        source={{ uri: item.avatar_url }}
+                        style={styles.imageNewFeed}
+                        resizeMode='contain'
+                    />                
+                    
+                     <this.openModalBox /> 
+                    <View style={styles.detailArea}>
+                    
+                        <View style={styles.row}>
+                            <View style={{ flex: 0.55, justifyContent: 'center' }}>
+                                <Text style={styles.label}>{item.first_name}</Text>
+                            </View>
+                            <View style={{ flex: 0.45 }}>
+                            <CheckBox
+                                key={item.id}
+                                onPress={() => this.onCheck(item)}
+                                title='Chọn'
+                                checked={item.is_check}
+                                //progressBarColor={'#007aff'}
+                                containerStyle={styles.ckBox}
+                            />
                         </View>
+                        </View>
+                        <Text style={styles.info}>Giá: {item.price}</Text>
+                        <Text numberOfLines={2} style={styles.info}>{item.last_message_content}</Text>
+    
                     </View>
-                    <Text style={styles.info}>Giá: {item.price}</Text>
-                    <Text numberOfLines={2} style={styles.info}>{item.last_message_content}</Text>
-
-                </View>
-
-            </TouchableOpacity>
-
-        )
+    
+                </TouchableOpacity>
+    
+            )
+        //}
     }
     render() {
-        return (
-
+        return (        
             <View>                
                 <FlatList
-                    data={this.state.newItem}
+                    data={this.state.listNewInvent}
                     renderItem={this.renderInventory}
                     keyExtractor={(item) => item.avatar_url}
                 />

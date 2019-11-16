@@ -4,7 +4,7 @@ import { Keyboard, Text, View, TextInput, TouchableWithoutFeedback, Alert, Keybo
 import { Button, Image } from 'react-native-elements';
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { ProgressDialog } from 'react-native-simple-dialogs';
-import {GoogleSignIn} from 'expo-google-sign-in';
+import { GoogleSignIn } from 'expo-google-sign-in';
 import Spinner from 'react-native-loading-spinner-overlay';
 import * as Google from 'expo-google-app-auth';
 import firebase from 'firebase'
@@ -20,13 +20,13 @@ export default class LoginScreen extends Component {
     }
 
   }
-  
-  
+
+
   onSignIn = googleUser => {
     console.log('Google Auth Response', googleUser);
     // We need to register an Observer on Firebase Auth to make sure auth is initialized.
     var unsubscribe = firebase.auth().onAuthStateChanged(
-      function(firebaseUser) {
+      function (firebaseUser) {
         unsubscribe();
         // Check if we are already signed-in Firebase with the correct user.
         if (!this.isUserEqual(googleUser, firebaseUser)) {
@@ -39,7 +39,7 @@ export default class LoginScreen extends Component {
           firebase
             .auth()
             .signInWithCredential(credential)
-            .then(function(result) {
+            .then(function (result) {
               console.log('user signed in ');
               if (result.additionalUserInfo.isNewUser) {
                 firebase
@@ -52,7 +52,7 @@ export default class LoginScreen extends Component {
                     last_name: result.additionalUserInfo.profile.family_name,
                     created_at: Date.now()
                   })
-                  .then(function(snapshot) {
+                  .then(function (snapshot) {
                     // console.log('Snapshot', snapshot);
                   });
               } else {
@@ -64,7 +64,7 @@ export default class LoginScreen extends Component {
                   });
               }
             })
-            .catch(function(error) {
+            .catch(function (error) {
               // Handle Errors here.
               var errorCode = error.code;
               var errorMessage = error.message;
@@ -86,7 +86,7 @@ export default class LoginScreen extends Component {
       for (var i = 0; i < providerData.length; i++) {
         if (
           providerData[i].providerId ===
-            firebase.auth.GoogleAuthProvider.PROVIDER_ID &&
+          firebase.auth.GoogleAuthProvider.PROVIDER_ID &&
           providerData[i].uid === googleUser.getBasicProfile().getId()
         ) {
           // We don't need to reauth the Firebase connection.
@@ -96,26 +96,26 @@ export default class LoginScreen extends Component {
     }
     return false;
   };
-  componentDidMount(){
+  componentDidMount() {
     //console.log(firebase.database())
   }
-  signInWithGoogleAsync= async()=> {
+  signInWithGoogleAsync = async () => {
     try {
       const result = await Google.logInAsync({
         androidClientId: "129108952081-ueggvfsvl6hsdt85e4ok79t0ec595a5n.apps.googleusercontent.com",
         //behavior:'web',
-        androidStandaloneAppClientId:  "129108952081-ueggvfsvl6hsdt85e4ok79t0ec595a5n.apps.googleusercontent.com",
+        androidStandaloneAppClientId: "129108952081-ueggvfsvl6hsdt85e4ok79t0ec595a5n.apps.googleusercontent.com",
         scopes: ['profile', 'email'],
       });
-  
+
       if (result.type === 'success') {
         this.onSignIn(result);
         console.log(result.accessToken)
-        this.props.navigation.navigate('Loading',  {
-          'token':result.accessToken
-        });    
+        this.props.navigation.navigate('Main', {
+          'token': result.accessToken
+        });
         return result.accessToken;
-    
+
       } else {
         return { cancelled: true };
       }
@@ -124,7 +124,7 @@ export default class LoginScreen extends Component {
       return { error: true };
     }
   }
- 
+
   render() {
     return (
       <KeyboardAvoidingView style={styles.containerView} behavior="padding">
@@ -148,19 +148,33 @@ export default class LoginScreen extends Component {
               />
               <TextInput placeholder="Tên đăng nhập" placeholderColor="#c4c3cb" style={styles.loginFormTextInput} />
               <TextInput placeholder="Mật khẩu" placeholderColor="#c4c3cb" style={styles.loginFormTextInput} secureTextEntry={true} />
-              <Button
-                buttonStyle={styles.loginButton}
-                onPress={() => this.openProgress()}
-                title="Đăng nhập"
-              />
-              <TouchableOpacity
-                style={styles.fbLoginButton}
-               onPress={() => this.signInWithGoogleAsync()}
-              >
-                <Text style={styles.txtFBLogin}>
-                  Đăng nhập với tài khoản Google
+              <View style={{ alignItems: 'center' }}>
+                <Button
+                  buttonStyle={styles.loginButton}
+                  onPress={() => this.openProgress()}
+                  title="Đăng nhập"
+                />
+              </View>
+              <View style={{ alignItems: 'center' }}>
+                <TouchableOpacity
+                  style={styles.fbLoginButton}
+                  onPress={() => this.signInWithGoogleAsync()}
+                >
+                  <View style={styles.imGGArea}>
+                    <Image
+                      source={require('../assets/images/google-logo.png')}
+                      style={styles.ggLogo}
+                      resizeMode='contain'
+
+                    />
+                  </View>
+                  <View style={styles.txtGGArea}>
+                    <Text style={styles.txtFBLogin}>
+                      Đăng nhập với tài khoản Google
                 </Text>
-              </TouchableOpacity>
+                  </View>
+                </TouchableOpacity>
+              </View>
             </View>
             <ProgressDialog
               title="Đăng nhập"
@@ -177,8 +191,6 @@ export default class LoginScreen extends Component {
     );
   }
 
-  componentDidMount() {
-  }
 
   componentWillUnmount() {
     this.setState({ spinner: false });
@@ -202,7 +214,7 @@ export default class LoginScreen extends Component {
 
     setTimeout(
       () => {
-        this.setState({ spinner: false });  
+        this.setState({ spinner: false });
         this.props.navigation.navigate('Main', {});
         //this.setState({ spinner: false });
       },
@@ -248,14 +260,41 @@ const styles = StyleSheet.create({
   },
   loginButton: {
     backgroundColor: '#3897f1',
-    borderRadius: 5,
+    borderRadius: 15,
     height: 80,
+    width: 320,
     marginTop: 10,
   },
   fbLoginButton: {
-    height: 45,
-    marginTop: 10,
+    borderWidth: 3,
+    borderColor: '#fff',
+    width: 300,
     alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#fff',
+    height: 70,
+    marginTop: 10,
+    flexDirection: 'row',
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 10,
+    },
+    shadowOpacity: 0.51,
+    shadowRadius: 13.16,
+    elevation: 20,
+  },
+  imGGArea: {
+    flex: 0.3,
+    alignItems: 'center'
+  },
+  txtGGArea: {
+    flex: 0.7,
+    //alignItems:'center',
+  },
+  ggLogo: {
+    width: 50,
+    height: 50,
   },
   imageNewFeed: {
     // flex: 1,
@@ -268,6 +307,7 @@ const styles = StyleSheet.create({
   },
   loginBody: {
     flex: 0.7,
+    marginHorizontal: 10,
   },
   spinnerTextStyle: {
     color: '#FFF'

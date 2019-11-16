@@ -1,55 +1,73 @@
 // ./screens/GroupsScreen.js
 import React from "react";
-import { Image, TouchableOpacity, View, Text, StyleSheet } from "react-native";
+import {Picker, Image, TouchableOpacity, View, Text, StyleSheet } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
-import { Card, Icon, Button } from 'react-native-elements';
+import { Card, Icon, Button, CheckBox } from 'react-native-elements';
 import inventory from "../utils/inventory.json";
 import TabBarIcon from '../components/TabBarIcon';
-export default class NotiScreen extends React.Component {
+export default class InventoryScreen extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      listInventory:inventory,
-
+      listInventory: inventory,
+  
     }
   }
  
   onPress = data => this.setState({ data });
- 
+
   renderOptionItem = ({ item }) => {
     console.log(item.id);
     return (
-      <TouchableOpacity style={styles.messeageView}>
-        <Image
-          source={{ uri: item.avatar_url }}
-          style={styles.imageNewFeed}
-          resizeMode='contain'
-        />
-       
+      <View style={styles.rowOption}>
+        <TouchableOpacity style={styles.messeageView}>
+
+          <Image
+            source={{ uri: item.avatar_url }}
+            style={styles.imageNewFeed}
+            resizeMode='contain'
+          />
+
           <View style={styles.detailArea}>
-            <Text style={styles.label}>{item.first_name}</Text>
+            <View style={styles.row}>
+              <View style={{ flex: 0.55, justifyContent: 'center' }}>
+                <Text style={styles.label}>{item.first_name}</Text>
+              </View>           
+            </View>
             <Text style={styles.info}>Ngày bắt đầu: {item.date_begin}</Text>
             <Text style={styles.info}>Số lượng đã bán: {item.quantity}</Text>
           </View>
-     
-      </TouchableOpacity>
+
+        </TouchableOpacity>
+      </View>
     )
   }
   render() {
     return (
-      <View style={styles.rowOption}>
-          <FlatList
-            data={this.state.listInventory}
-            renderItem={this.renderOptionItem}
-            keyExtractor={(item) => item.avatar_url}
-          />
+      <View>
+        <Picker
+              selectedValue={this.state.language}
+              style={{ height: 50, width: 100,marginLeft:10,marginTop:10}}
+              onValueChange={(itemValue, itemIndex) =>
+                this.setState({ language: itemValue })
+              }>
+              <Picker.Item label="A - Z" value="java" />
+              <Picker.Item label="Ngày nhập" value="js1" />              
+            </Picker>
+        <View style={{ alignItems: 'flex-end', marginRight: 10 }}>
         </View>
-  
+        <FlatList
+          data={this.state.listInventory}
+          renderItem={this.renderOptionItem}
+          keyExtractor={(item) => item.avatar_url}
+        />
+      </View>
+
     );
   }
 }
 
-NotiScreen.navigationOptions = props => {
+InventoryScreen.navigationOptions = props => {
 
   return {
 
@@ -73,10 +91,10 @@ NotiScreen.navigationOptions = props => {
 };
 
 const styles = StyleSheet.create({
-  messeageView:{
+  messeageView: {
     marginHorizontal: 10,
-    marginVertical:10,
-    flexDirection:'row',
+    marginVertical: 10,
+    flexDirection: 'row',
   },
   containerFlex: {
     flex: 1,
@@ -97,7 +115,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'pink'
   },
   detailArea: {
-    marginVertical: 20,
+    marginVertical: 5,
     marginLeft: 10,
     width: 200,
     flexDirection: 'column',
@@ -108,16 +126,16 @@ const styles = StyleSheet.create({
   },
   rowOption: {
     flexDirection: 'row',
-    borderStyle: 'solid',
-    borderWidth: 1,
-    borderColor: '#DEDCDC',
+    // borderStyle: 'solid',
+    // borderWidth: 1,
+    // borderColor: '#DEDCDC',
 
     flex: 1,
   },
-  btnDrawer:{
-    width:20,
-    height:20,
-    marginLeft:10,
+  btnDrawer: {
+    width: 20,
+    height: 20,
+    marginLeft: 10,
   },
   label: {
     fontSize: 16,
@@ -130,17 +148,36 @@ const styles = StyleSheet.create({
     color: 'grey'
   },
   imageNewFeed: {
-    flex: 1,
-    width: 80,
-    //height: 120,
-    marginHorizontal:10,
-    justifyContent: 'center',
-    alignItems:'center'
-    //backgroundColor:'red',
+    width: 100,
+    height: 120,
+    marginHorizontal: 10,
+    //sjustifyContent: 'center',
+    //alignItems: 'center'
   },
   invenArea: {
     flex: 0.5,
 
   },
- 
+  ckBox: {
+    width: 90,
+    height: 40,
+    // justifyContent:'center',
+    // alignItems:'center',
+    backgroundColor: '#fff',
+    borderWidth: 0,
+  },
+  btnCheckAllCkb: {
+    width: 100,
+    height: 30,
+    // borderRadius: 20,
+    marginTop: 5,
+    backgroundColor: 'rgb(71,113,246)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 10,
+  },
+  txtCheckAll: {
+    color: '#fff',
+    fontSize: 16,
+  },
 });  

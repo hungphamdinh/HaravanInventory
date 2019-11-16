@@ -25,11 +25,11 @@ export default class OptionItem extends React.Component {
             return item;
         });
 
-        const newUpdateProduct = [...updateProduct];
+        //const newUpdateProduct = [...updateProduct];
 
-        this.setState({ listOption: updateProduct,listNewOption:itemCheck });
-        this.props.addNewOptionItem(itemCheck);
-      
+        this.setState({ listOption: updateProduct });
+        //this.props.addNewOptionItem(itemCheck);
+        this.props.onNextBtnOption();
 
     }
 

@@ -8,7 +8,7 @@ export default class DetailOptionScreen extends React.Component {
     }
     render(){
         const { navigation } = this.props;
-    const { avatar_url, first_name, last_message_content } = navigation.getParam('updateMessage');
+    const { avatar_url, first_name, last_message_content: price } = navigation.getParam('updateMessage');
 
     return (
         <View style={styles.container}>                                                                                                                                                                                    
@@ -18,15 +18,15 @@ export default class DetailOptionScreen extends React.Component {
                 source={{ uri: avatar_url }}
                 style={{
                     width: null,
-                    height: 80,
+                    height: 200,
                 }}
                 resizeMode='contain'
             />
             </TouchableOpacity>
             <View style={{ alignItems: 'center', marginTop: 10 }}>
-                <Text>{first_name}</Text>
+                <Text style={styles.txtInfo}>{first_name}</Text>
             </View>
-            <Text>{last_message_content}</Text>
+            <Text style={styles.txtInfo}>{price}</Text>
             </View>
             <View style={styles.footerAre}>
                  <TouchableOpacity style={styles.btnRegister}>
@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
         flex:0.9,
     },
     footerAre:{
-        backgroundColor:'red',
+        //backgroundColor:'red',
         flexDirection:'column',
         flex:0.1,
     },
@@ -79,6 +79,9 @@ const styles = StyleSheet.create({
         fontSize:30,
         fontWeight:'bold',
         color:'#fff',
-    }
+    },
+    txtInfo:{
+        fontSize:24
+    },
 
 });

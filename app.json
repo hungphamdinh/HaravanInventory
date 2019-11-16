@@ -27,9 +27,7 @@
       "supportsTablet": true
     },
     "android": {
-      "package": "com.example.HaravanInventory",
-      "googleServicesFile": "./google-services.json"
-      
+      "package": "com.example.HaravanInventory"
     }
   }
 }
