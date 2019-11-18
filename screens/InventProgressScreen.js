@@ -31,20 +31,33 @@ export default class InventProgressScreen extends React.Component {
     //     this.setState(({ listNewOption: newItem }));
     // }
     onNextBtnInvent = () => {
-        this.state.listProduct.map(item => {
-            //console.log(item);
-            if (item.is_check === true) {
-                this.setState({ disableNextBtn: false });
-
-            }
-            else {
-                
-                // this.setState({ disableNextBtn: true });
-                //console.log('onCheck false');
-            }
-        })
+      const itemCheck= this.state.listProduct.every(item=>{
+           if(item.is_check===false){
+               item = true;
+           }
+           else{
+               item=false;
+           }
+           return item;    
+       }
+       )
+       this.setState({disableNextBtn:itemCheck});
 
     }
+    onNextBtnOption = () => {
+        const itemCheck= this.state.listOption.every(item=>{
+             if(item.is_check===false){
+                 item = true;
+             }
+             else{
+                 item=false;
+             }
+             return item;    
+         }
+         )
+         this.setState({disableNextBtn:itemCheck});
+  
+      }
     onAddNewItemToCheck = () => {
         const NewOption = this.state.listOption.filter(item => {
             if (item.is_check == true) {
@@ -60,19 +73,6 @@ export default class InventProgressScreen extends React.Component {
         })
         this.setState({ listNewInvent: listNewInvent, listNewOption: NewOption });
     }
-    onNextBtnOption = () => {
-        this.state.listOption.map(item => {
-            //console.log(item);
-            if (item.is_check === true) {
-                this.setState({ disableNextBtn: false });
-            }
-            else {
-                // this.setState({ disableNextBtn: false });
-
-            }
-        })
-
-    }
     onProductDetail = id => {
         const pView = this.state.listProduct.find(pIndex => pIndex.id === id);
         // console.log(pView)
@@ -82,9 +82,6 @@ export default class InventProgressScreen extends React.Component {
             });
         }, 1000);
     };
-    onDisable = () => {
-        this.setState({ disableNextBtn: true });
-    }
     render() {
 
 
@@ -102,8 +99,8 @@ export default class InventProgressScreen extends React.Component {
                 >
 
                     <ProgressStep
-                        onNext={this.onDisable}
                         previousBtnDisabled={true}
+                        onNext={this.onNextBtnOption}
                         nextBtnDisabled={this.state.disableNextBtn}
                         nextBtnText='Tiếp theo'
                         //  onPrevious={this.onPreviousNotNull} 

@@ -24,7 +24,7 @@ export default class InventoryItem extends React.Component {
     };
 
     onCheck = (itemCheck) => {
-      //  console.log(itemCheck);
+        //  console.log(itemCheck);
         const updateProduct = this.state.listProduct.map(item => {
             //console.log(id);
             if (item.id === itemCheck.id) {
@@ -37,8 +37,8 @@ export default class InventoryItem extends React.Component {
             }
             return item;
         });
-        
-       
+
+
         const newUpdateProduct = [...updateProduct];
         this.props.onNextBtnInvent();
 
@@ -53,14 +53,14 @@ export default class InventoryItem extends React.Component {
                     if (item.is_check == false) {
                         item.is_check = true;
                     }
-//                     else {
-//                        // item.is_check = true;
-//                         // var arrNewItem=[];
-//                         // arrNewItem=arrNewItem.push(item.is_check);
-//                         // item=arrNewItem;
-//   //                      this.props.addNewInventItem(item);
-//   //                      this.props.onCheckBoxInvent(item);                     
-//                     }
+                    //                     else {
+                    //                        // item.is_check = true;
+                    //                         // var arrNewItem=[];
+                    //                         // arrNewItem=arrNewItem.push(item.is_check);
+                    //                         // item=arrNewItem;
+                    //   //                      this.props.addNewInventItem(item);
+                    //   //                      this.props.onCheckBoxInvent(item);                     
+                    //                     }
                 }
             }
             return item;
@@ -104,6 +104,7 @@ export default class InventoryItem extends React.Component {
         //}
     }
     renderInventory = ({ item }) => {
+
         return (
 
             <TouchableOpacity style={styles.messeageView} onPress={() => this.toggleModal(item)}>

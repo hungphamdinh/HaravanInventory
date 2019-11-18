@@ -75,6 +75,23 @@ export default class Drawer extends React.Component {
             </View>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => {
+            this.props.navigation.navigate('Statistic', {
+              options: { bottomTabs: { visible: false, drawBehind: true, animate: true } }
+            });
+          }}>
+            <View style={styles.row}>
+              <Ionicons style={styles.iconDrawer}
+                name={Platform.OS === 'ios' ? 'ios-analytics' : 'md-analytics'}
+                size={26}
+              />
+              <View style={styles.contentDrawer}>
+                <Text style={styles.content}>
+                  Thống kê
+              </Text>
+              </View>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => {
             this.props.navigation.navigate('AboutUs', {
               options: { bottomTabs: { visible: false, drawBehind: true, animate: true } }
             });

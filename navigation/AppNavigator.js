@@ -12,6 +12,7 @@ import InventProgressScreen from '../screens/InventProgressScreen'
 import LoadingScreen from '../screens/LoadingScreen'
 import Drawer from '../navigation/Drawer'
 import HomeScreen from '../screens/HomeScreen'
+import StatisticScreen from '../screens/StatisticScreen'
 import firebase from 'firebase'
 import {firebaseConfig} from '../config/config'
 
@@ -37,6 +38,7 @@ const RootStack = createStackNavigator({
   ProductDe: ProductDetail,
   InventProgress:InventProgressScreen,
   DetailOption: DetailOptionScreen,
+  Statistic:StatisticScreen,
   AboutUs: AboutUsScreen,
   Contact: ContactScreen,
 });
