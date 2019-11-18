@@ -88,6 +88,15 @@ export default class InventProgressScreen extends React.Component {
           activeStepIconBorderColor={"#007aff"}
         >
           <ProgressStep
+            nextBtnStyle={styles.progessNextBtn}
+            nextBtnTextStyle={styles.progessNextBtnText}
+            scrollViewProps={{
+              keyboardShouldPersistTaps: 'handled',
+              contentContainerStyle: {
+                flex: 1,
+                justifyContent: 'center'
+              }
+            }}
             previousBtnDisabled={true}
             onNext={this.onNextBtnOption}
             nextBtnDisabled={this.state.disableNextBtn}
@@ -105,6 +114,9 @@ export default class InventProgressScreen extends React.Component {
           </ProgressStep>
 
           <ProgressStep
+            nextBtnStyle={styles.progessNextBtn}
+            nextBtnTextStyle={styles.progessNextBtnText}
+            previousBtnStyle={styles.progessPreBtn}
             label="Tiện ích"
             nextBtnDisabled={this.state.disableNextBtn}
             onNext={this.onAddNewItemToCheck}
@@ -121,6 +133,9 @@ export default class InventProgressScreen extends React.Component {
             </View>
           </ProgressStep>
           <ProgressStep
+            nextBtnStyle={styles.progessNextBtn}
+            nextBtnTextStyle={styles.progessNextBtnText}
+            previousBtnStyle={styles.progessPreBtn}
             label="Kiểm tra"
             previousBtnText="Quay lại"
             nextBtnText="Tiếp theo"
@@ -137,6 +152,9 @@ export default class InventProgressScreen extends React.Component {
             </View>
           </ProgressStep>
           <ProgressStep
+            nextBtnStyle={styles.progessNextBtn}
+            nextBtnTextStyle={styles.progessNextBtnText}
+            previousBtnStyle={styles.progessPreBtn}
             label="Bước 4"
             previousBtnText="Quay lại"
             finishBtnText="Hoàn tất"
@@ -261,5 +279,20 @@ const styles = StyleSheet.create({
   modal: {
     justifyContent: "center",
     alignItems: "center"
+  },
+  progessNextBtnText: {
+    color: "white"
+  },
+  progessNextBtn: {
+    borderColor: "deepskyblue",
+    borderWidth: 1,
+    borderRadius: 25,
+    backgroundColor: 'deepskyblue',
+    marginVertical: 0,
+  },
+  progessPreBtn: {
+    borderRadius: 25,
+    borderWidth: 1,
+    borderColor: "deepskyblue"
   }
 });
