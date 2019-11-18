@@ -1,32 +1,39 @@
 import React, { Component } from "react";
 
-import { Keyboard, Text, View, TextInput, TouchableWithoutFeedback, Alert, KeyboardAvoidingView, StyleSheet } from 'react-native';
-import { Button, Image } from 'react-native-elements';
+import {
+  Keyboard,
+  Text,
+  View,
+  TextInput,
+  TouchableWithoutFeedback,
+  Alert,
+  KeyboardAvoidingView,
+  StyleSheet
+} from "react-native";
+import { Button, Image } from "react-native-elements";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { ProgressDialog } from 'react-native-simple-dialogs';
-import { GoogleSignIn } from 'expo-google-sign-in';
-import Spinner from 'react-native-loading-spinner-overlay';
-import * as Google from 'expo-google-app-auth';
-import firebase from 'firebase'
-import Expo from 'expo'
-const appId = "1047121222092614"
+import { ProgressDialog } from "react-native-simple-dialogs";
+import { GoogleSignIn } from "expo-google-sign-in";
+import Spinner from "react-native-loading-spinner-overlay";
+import * as Google from "expo-google-app-auth";
+import firebase from "firebase";
+import Expo from "expo";
+const appId = "1047121222092614";
 
 export default class LoginScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
       progressVisible: true,
-      spinner: false,
-    }
-
+      spinner: false
+    };
   }
 
-
   onSignIn = googleUser => {
-    console.log('Google Auth Response', googleUser);
+    console.log("Google Auth Response", googleUser);
     // We need to register an Observer on Firebase Auth to make sure auth is initialized.
     var unsubscribe = firebase.auth().onAuthStateChanged(
-      function (firebaseUser) {
+      function(firebaseUser) {
         unsubscribe();
         // Check if we are already signed-in Firebase with the correct user.
         if (!this.isUserEqual(googleUser, firebaseUser)) {
@@ -39,12 +46,12 @@ export default class LoginScreen extends Component {
           firebase
             .auth()
             .signInWithCredential(credential)
-            .then(function (result) {
-              console.log('user signed in ');
+            .then(function(result) {
+              console.log("user signed in ");
               if (result.additionalUserInfo.isNewUser) {
                 firebase
                   .database()
-                  .ref('/users/' + result.user.uid)
+                  .ref("/users/" + result.user.uid)
                   .set({
                     gmail: result.user.email,
                     profile_picture: result.additionalUserInfo.profile.picture,
@@ -52,19 +59,19 @@ export default class LoginScreen extends Component {
                     last_name: result.additionalUserInfo.profile.family_name,
                     created_at: Date.now()
                   })
-                  .then(function (snapshot) {
+                  .then(function(snapshot) {
                     // console.log('Snapshot', snapshot);
                   });
               } else {
                 firebase
                   .database()
-                  .ref('/users/' + result.user.uid)
+                  .ref("/users/" + result.user.uid)
                   .update({
                     last_logged_in: Date.now()
                   });
               }
             })
-            .catch(function (error) {
+            .catch(function(error) {
               // Handle Errors here.
               var errorCode = error.code;
               var errorMessage = error.message;
@@ -75,7 +82,7 @@ export default class LoginScreen extends Component {
               // ...
             });
         } else {
-          console.log('User already signed-in Firebase.');
+          console.log("User already signed-in Firebase.");
         }
       }.bind(this)
     );
@@ -86,7 +93,7 @@ export default class LoginScreen extends Component {
       for (var i = 0; i < providerData.length; i++) {
         if (
           providerData[i].providerId ===
-          firebase.auth.GoogleAuthProvider.PROVIDER_ID &&
+            firebase.auth.GoogleAuthProvider.PROVIDER_ID &&
           providerData[i].uid === googleUser.getBasicProfile().getId()
         ) {
           // We don't need to reauth the Firebase connection.
@@ -102,20 +109,21 @@ export default class LoginScreen extends Component {
   signInWithGoogleAsync = async () => {
     try {
       const result = await Google.logInAsync({
-        androidClientId: "129108952081-ueggvfsvl6hsdt85e4ok79t0ec595a5n.apps.googleusercontent.com",
+        androidClientId:
+          "129108952081-ueggvfsvl6hsdt85e4ok79t0ec595a5n.apps.googleusercontent.com",
         //behavior:'web',
-        androidStandaloneAppClientId: "129108952081-ueggvfsvl6hsdt85e4ok79t0ec595a5n.apps.googleusercontent.com",
-        scopes: ['profile', 'email'],
+        androidStandaloneAppClientId:
+          "129108952081-ueggvfsvl6hsdt85e4ok79t0ec595a5n.apps.googleusercontent.com",
+        scopes: ["profile", "email"]
       });
 
-      if (result.type === 'success') {
+      if (result.type === "success") {
         this.onSignIn(result);
-        console.log(result.accessToken)
-        this.props.navigation.navigate('Main', {
-          'token': result.accessToken
+        console.log(result.accessToken);
+        this.props.navigation.navigate("Main", {
+          token: result.accessToken
         });
         return result.accessToken;
-
       } else {
         return { cancelled: true };
       }
@@ -123,14 +131,14 @@ export default class LoginScreen extends Component {
       console.log(e);
       return { error: true };
     }
-  }
+  };
 
   render() {
     return (
       <KeyboardAvoidingView style={styles.containerView} behavior="padding">
         <Spinner
           visible={this.state.spinner}
-          textContent={'Loading...'}
+          textContent={"Loading..."}
           textStyle={styles.spinnerTextStyle}
         />
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -139,39 +147,45 @@ export default class LoginScreen extends Component {
               <Text style={styles.logoText}>Đăng nhập</Text>
             </View>
             <View style={styles.loginBody}>
-
               <Image
-                source={require('../assets/images/spartan-logo.png')}
+                source={require("../assets/images/spartan-logo.png")}
                 style={styles.imageNewFeed}
-                resizeMode='contain'
-
+                resizeMode="contain"
               />
-              <TextInput placeholder="Tên đăng nhập" placeholderColor="#c4c3cb" style={styles.loginFormTextInput} />
-              <TextInput placeholder="Mật khẩu" placeholderColor="#c4c3cb" style={styles.loginFormTextInput} secureTextEntry={true} />
-              <View style={{ alignItems: 'center' }}>
+              <TextInput
+                placeholder="Tên đăng nhập"
+                placeholderColor="#c4c3cb"
+                style={styles.loginFormTextInput}
+              />
+              <TextInput
+                placeholder="Mật khẩu"
+                placeholderColor="#c4c3cb"
+                style={styles.loginFormTextInput}
+                secureTextEntry={true}
+              />
+              <View style={{ alignItems: "center" }}>
                 <Button
                   buttonStyle={styles.loginButton}
                   onPress={() => this.openProgress()}
                   title="Đăng nhập"
                 />
               </View>
-              <View style={{ alignItems: 'center' }}>
+              <View style={{ alignItems: "center" }}>
                 <TouchableOpacity
                   style={styles.fbLoginButton}
                   onPress={() => this.signInWithGoogleAsync()}
                 >
                   <View style={styles.imGGArea}>
                     <Image
-                      source={require('../assets/images/google-logo.png')}
+                      source={require("../assets/images/google-logo.png")}
                       style={styles.ggLogo}
-                      resizeMode='contain'
-
+                      resizeMode="contain"
                     />
                   </View>
                   <View style={styles.txtGGArea}>
                     <Text style={styles.txtFBLogin}>
                       Đăng nhập với tài khoản Google
-                </Text>
+                    </Text>
                   </View>
                 </TouchableOpacity>
               </View>
@@ -187,14 +201,11 @@ export default class LoginScreen extends Component {
           </View>
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
-
     );
   }
 
-
   componentWillUnmount() {
     this.setState({ spinner: false });
-
   }
 
   // onLoginPress() {
@@ -207,109 +218,104 @@ export default class LoginScreen extends Component {
   //   // setTimeout(()=>{
   //   //   this.props.navigation.navigate('Main', {});
   //   // },3000);
-  //   )    
+  //   )
   // }
   openProgress = () => {
     this.setState({ spinner: true });
 
-    setTimeout(
-      () => {
-        this.setState({ spinner: false });
-        this.props.navigation.navigate('Main', {});
-        //this.setState({ spinner: false });
-      },
-      4000,
-    );
-  }
+    setTimeout(() => {
+      this.setState({ spinner: false });
+      this.props.navigation.navigate("Main", {});
+      //this.setState({ spinner: false });
+    }, 4000);
+  };
 }
 const styles = StyleSheet.create({
-
   containerView: {
-    flex: 1,
+    flex: 1
   },
   loginScreenContainer: {
-    flex: 1,
+    flex: 1
   },
   logoText: {
     fontSize: 40,
     fontWeight: "800",
     marginBottom: 30,
     // justifyContent:'flex-start',
-    textAlign: 'center',
+    textAlign: "center"
   },
   loginFormView: {
     flex: 0.3,
-    justifyContent: 'center',
+    justifyContent: "center"
   },
   txtFBLogin: {
-    color: '#3897f1',
+    color: "#3897f1"
   },
   loginFormTextInput: {
     height: 60,
     fontSize: 16,
     borderRadius: 5,
     borderWidth: 1,
-    borderColor: '#eaeaea',
-    backgroundColor: '#fafafa',
+    borderColor: "#eaeaea",
+    backgroundColor: "#fafafa",
     paddingLeft: 10,
     marginLeft: 15,
     marginRight: 15,
     marginTop: 5,
-    marginBottom: 5,
-
+    marginBottom: 5
   },
   loginButton: {
-    backgroundColor: '#3897f1',
+    backgroundColor: "#3897f1",
     borderRadius: 15,
     height: 80,
     width: 320,
-    marginTop: 10,
+    marginTop: 10
   },
   fbLoginButton: {
     borderWidth: 3,
-    borderColor: '#fff',
+    borderColor: "#fff",
     width: 300,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#fff',
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#fff",
     height: 70,
     marginTop: 10,
-    flexDirection: 'row',
+    flexDirection: "row",
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 10,
+      height: 10
     },
     shadowOpacity: 0.51,
     shadowRadius: 13.16,
-    elevation: 20,
+    elevation: 20
   },
   imGGArea: {
     flex: 0.3,
-    alignItems: 'center'
+    alignItems: "center"
   },
   txtGGArea: {
-    flex: 0.7,
+    flex: 0.7
     //alignItems:'center',
   },
   ggLogo: {
     width: 50,
-    height: 50,
+    height: 50
   },
   imageNewFeed: {
     // flex: 1,
     marginBottom: 10,
     height: 80,
     marginHorizontal: 10,
-    justifyContent: 'center',
+    justifyContent: "center"
 
     //backgroundColor:'red',
   },
   loginBody: {
     flex: 0.7,
-    marginHorizontal: 10,
+    marginHorizontal: 10
   },
   spinnerTextStyle: {
-    color: '#FFF'
-  },
-})
+    color: "#FFF"
+  }
+});
